@@ -4,6 +4,8 @@ package ru.kata.spring.boot_security.demo.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -15,6 +17,10 @@ public class User {
     private long id;
     @Column
     private String name;
+
+
+    @OneToMany(mappedBy = "user")
+    private Set<Role> roles;
 
 
     public User(String name) {
