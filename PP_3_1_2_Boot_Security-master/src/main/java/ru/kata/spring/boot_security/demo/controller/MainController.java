@@ -42,5 +42,11 @@ public class MainController {
         return "admin";
     }
 
+    @RequestMapping(value = "/user" , method = RequestMethod.GET)
+    public String getUser(){
+
+        return "user";
+    }
+
 
 }
