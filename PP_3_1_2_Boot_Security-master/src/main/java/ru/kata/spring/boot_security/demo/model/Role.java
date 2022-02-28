@@ -1,34 +1,31 @@
 package ru.kata.spring.boot_security.demo.model;
 
-import javax.persistence.*;
 
-@Table
-@Entity
-public class Role {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-    @Column
-    private String role;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+import static java.util.Set.*;
 
-    public Long getId() {
-        return id;
+public enum Role {
+    USER(of(Permission.DEVELOPERS_READ)),
+    ADMIN(of(Permission.DEVELOPERS_WRITE , Permission.DEVELOPERS_READ));
+
+    private final Set<Permission> permissions;
+
+
+    Role(Set<Permission> permissions) {
+        this.permissions = permissions;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Set<Permission> getPermissions() {
+        return permissions;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
+    public Set<SimpleGrantedAuthority> getAuthorites(){
+        return getPermissions().stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+                .collect(Collectors.toSet());
     }
 }

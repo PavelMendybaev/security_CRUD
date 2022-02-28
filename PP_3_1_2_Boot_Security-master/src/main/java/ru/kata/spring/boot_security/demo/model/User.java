@@ -15,18 +15,22 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column
-    private String name;
+    private String name = "test_name";
 
+    @Column
+    private String password;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Role> roles;
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
 
-
-    public User(String name) {
+    public User(String name, String password, Role role) {
         this.name = name;
-
+        this.password = password;
+        this.role = role;
     }
+
     public User(){
 
     }
@@ -47,4 +51,19 @@ public class User {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }
