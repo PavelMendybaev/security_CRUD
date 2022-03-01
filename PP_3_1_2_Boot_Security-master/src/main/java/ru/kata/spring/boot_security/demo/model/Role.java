@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Set.*;
 
+
 public enum Role {
     USER(of(Permission.DEVELOPERS_READ)),
     ADMIN(of(Permission.DEVELOPERS_WRITE , Permission.DEVELOPERS_READ));

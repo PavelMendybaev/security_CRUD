@@ -5,8 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -42,17 +41,24 @@ public class MainController {
 
         return "login";
     }
+    @RequestMapping(value = "/admin" , method = RequestMethod.POST)
+    public String PostEnter(@RequestParam("username") String name , ModelMap model ) {
+        userService.save(new User(name , passwordEncoder.encode(name) ,Role.USER));
 
-    @RequestMapping(value = "/login" , method = RequestMethod.POST)
-    public String login(){
-
-
-
-        return "login";
+        List<User> users = userService.users();
+        model.addAttribute("users", users);
+        return "index";
     }
 
 
+    @GetMapping("{id}")
+    public String showUser(@PathVariable("id") Long id , ModelMap model){
 
+        User user = userService.getUserById(id);
+        model.addAttribute("user" , user);
+        return "user";
+
+    }
 
 
     @RequestMapping(value = "/admin" , method = RequestMethod.GET)
@@ -62,14 +68,6 @@ public class MainController {
         model.addAttribute("users", users);
         return "admin";
     }
-
-
-    @RequestMapping(value = "/admin" , method = RequestMethod.POST)
-    public String admin(){
-        userService.save(new User("user2" , passwordEncoder.encode("user2") ,Role.USER));
-        return "admin";
-    }
-
 
 
 
