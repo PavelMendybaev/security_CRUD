@@ -1,10 +1,28 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin</title>
+    <title>Menu</title>
 </head>
 <body>
-    <a>Page Admin</a>
+<div>
+    <label>please Add user</label>
+    <br/>
+    <form th:action="@{/}"  th:method="POST" >
+        <div>     name <input class="fo" type="text" th:name="username"  /></div>
+        <br/>
+        <div><input type="submit" value="Add user"/></div>
+    </form>
+
+    <br/>
+    <p>click on the user to change</p>
+    <br/>
+
+    <th:block th:each="user : ${users}">
+        <a th:href="${user.getId()}"  th:text="${user.getName()}"></a>
+        <br/>
+    </th:block>
+</div>
 </body>
 </html>
