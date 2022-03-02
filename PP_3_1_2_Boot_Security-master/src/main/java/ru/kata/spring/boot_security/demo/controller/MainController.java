@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,27 +29,39 @@ public class MainController {
     }
 
 
-    @RequestMapping(value = "/" , method = RequestMethod.GET)
+    @GetMapping(value = "/")
+
     public String getIndex(){
         return "index";
     }
 
 
-    @RequestMapping(value = "/login" , method = RequestMethod.GET)
+    @GetMapping(value = "/login" )
     public String getLogin(){
-
-
-
         return "login";
     }
-    @RequestMapping(value = "/admin" , method = RequestMethod.POST)
-    public String PostEnter(@RequestParam("username") String name , ModelMap model ) {
-        userService.save(new User(name , passwordEncoder.encode(name) ,Role.USER));
+
+    @PreAuthorize("hasAnyAuthority('developers:write')")
+    @PostMapping(value = "/admin" )
+    public String PostEnter(@RequestParam("username") String name ,
+                            @RequestParam("password") String password ,
+                            @RequestParam("role") String role ,
+                            ModelMap model ) {
+        userService.save(new User(name , passwordEncoder.encode(password) ,Role.valueOf(role)));
 
         List<User> users = userService.users();
         model.addAttribute("users", users);
-        return "index";
+        return "admin";
     }
+
+    @GetMapping(value = "/admin" )
+    public String getAdmin(ModelMap model){
+
+        List<User> users = userService.users();
+        model.addAttribute("users", users);
+        return "admin";
+    }
+
 
 
     @GetMapping("{id}")
@@ -61,13 +74,7 @@ public class MainController {
     }
 
 
-    @RequestMapping(value = "/admin" , method = RequestMethod.GET)
-    public String getAdmin(ModelMap model){
 
-        List<User> users = userService.users();
-        model.addAttribute("users", users);
-        return "admin";
-    }
 
 
 
@@ -76,6 +83,26 @@ public class MainController {
     public String getUser(){
 
         return "user";
+    }
+
+    @RequestMapping(value = "{id}" , method = RequestMethod.POST)
+    public String getUser(@PathVariable("id") Long id ,@RequestParam("new_username") String new_name , ModelMap model){
+
+        User user = userService.getUserById(id);
+        user.setName(new_name);
+        userService.save(user);
+        model.addAttribute("user" , user);
+        return "user";
+
+    }
+
+    @DeleteMapping(value = "{id}" )
+    public String delUser(@PathVariable("id") Long id , ModelMap model){
+
+        userService.deleteById(id);
+
+        return "admin";
+
     }
 
 
