@@ -17,9 +17,7 @@
         <br/>
     </form>
 
-    <form th:action="${user.getId()}" th:method="delete">
-        <input type="submit" value="delete">delete user</input>
-    </form>
+    <a th:href="@{/delete/{id}(id = ${user.getId()})}">delete user</a>
 
 
 

@@ -22,7 +22,7 @@
     <br/>
 
     <th:block th:each="user : ${users}">
-        <a th:href="${user.getId()}"  th:text="${user.getName()}"></a>
+        <a th:href="@{user/{id}(id = ${user.getId()})}"  th:text="${user.getName()}"></a>
         <br/>
     </th:block>
 </div>

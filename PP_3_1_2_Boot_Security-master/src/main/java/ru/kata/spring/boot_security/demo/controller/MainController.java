@@ -64,7 +64,7 @@ public class MainController {
 
 
 
-    @GetMapping("{id}")
+    @GetMapping("/user/{id}")
     public String showUser(@PathVariable("id") Long id , ModelMap model){
 
         User user = userService.getUserById(id);
@@ -81,11 +81,10 @@ public class MainController {
 
     @RequestMapping(value = "/user" , method = RequestMethod.GET)
     public String getUser(){
-
         return "user";
     }
 
-    @RequestMapping(value = "{id}" , method = RequestMethod.POST)
+    @RequestMapping(value = "/user/{id}" , method = RequestMethod.POST)
     public String getUser(@PathVariable("id") Long id ,@RequestParam("new_username") String new_name , ModelMap model){
 
         User user = userService.getUserById(id);
@@ -96,13 +95,12 @@ public class MainController {
 
     }
 
-    @DeleteMapping(value = "{id}" )
-    public String delUser(@PathVariable("id") Long id , ModelMap model){
+    @RequestMapping(value = "/delete/{id}" , method = RequestMethod.GET)
+    public String deleteUser(@PathVariable("id") Long id , ModelMap model){
 
         userService.deleteById(id);
 
-        return "admin";
-
+        return "delete";
     }
 
 
