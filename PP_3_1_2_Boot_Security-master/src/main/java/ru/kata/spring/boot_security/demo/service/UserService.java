@@ -22,8 +22,15 @@ public class UserService {
         userRepository.save(user);
     }
 
-
     public List<User> users(){
         return userRepository.users();
+    }
+
+    public User getUserById(Long id){
+        return userRepository.getUserById(id);
+    }
+
+    public void deleteById(Long id){
+        userRepository.deleteById(id);
     }
 }
